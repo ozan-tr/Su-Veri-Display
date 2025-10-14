@@ -1,0 +1,603 @@
+//old file that used to have all the code
+
+
+var map = L.map('map').setView([41, 29], 10);
+
+// 
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 20,
+    minZoom: 8,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+
+// Heatmap layers
+var circleMarkers = {
+    ph: [],
+    chlorine: [],
+    hardness: []
+};
+
+var interpolationLayers = {
+    ph: null,
+    chlorine: null,
+    hardness: null
+};
+
+var currentLayer = null;
+var currentInterpolation = null;
+var currentLayerName = 'none'; // Track current layer
+var markersLayer = L.layerGroup().addTo(map);
+
+loadData();
+
+function loadData() {
+    // Assuming DATA is defined in data.js
+    console.log('Loading data...');
+    addMarkers(DATA);
+    createCircleMarkers(DATA);
+    createInterpolationLayers(DATA);
+    createLayerControl();
+    console.log('Layer control should be visible now');
+}
+
+function addMarkers(data) {
+    data.forEach(function(item) {
+        var marker = L.marker([item.coordinates.latitude, item.coordinates.longitude]);
+        markersLayer.addLayer(marker);
+        const popup = createPopup(item);
+        marker.bindPopup(popup);
+    });
+}
+
+function createPopup(item) {
+    const phData = loadPhData(item);
+    
+    // Determine which layer is active
+    const activeLayer = currentLayerName.replace('-interp', '');
+    
+    const popupContent = `
+        <div class="popup-content">
+            <h4 class="popup-title">${item.origin}</h4>
+            <div class="data-item ${activeLayer === 'ph' ? 'highlighted' : ''}">
+                <div class="data-row ph-summary" onclick="togglePhDetails(event)">
+                    <span class="data-label">pH Ortalama:</span>
+                    <span class="data-value">${phData.avg.all}</span>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <div class="ph-details" style="display: none;">
+                    <div class="detail-item">
+                        <span class="detail-label">pH Paper:</span>
+                        <span class="detail-value">${phData.paper.length == 1 ? phData.paper[0] : (phData.paper.length > 1 ? phData.paper.join(", ") + " (Ort: " + phData.avg.paper + ")" : "Ölçüm Yok")}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">pH Pen:</span>
+                        <span class="detail-value">${phData.pen.length == 1 ? phData.pen[0] : (phData.pen.length > 1 ? phData.pen.join(", ") + " (Ort: " + phData.avg.pen + ")" : "Ölçüm Yok")}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">pH SuTest Indikator:</span>
+                        <span class="detail-value">${phData.sutest.length == 1 ? phData.sutest[0] : (phData.sutest.length > 1 ? phData.sutest.join(", ") + " (Ort: " + phData.avg.sutest + ")" : "Ölçüm Yok")}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="data-item ${activeLayer === 'chlorine' ? 'highlighted' : ''}">
+                <div class="data-row">
+                    <span class="data-label">Klor:</span>
+                    <span class="data-value">${item.klor == 0.1 ? "<" : ""} ${item.klor ? item.klor : "Ölçüm Yok"}</span>
+                </div>
+            </div>
+            <div class="data-item ${activeLayer === 'hardness' ? 'highlighted' : ''}">
+                <div class="data-row">
+                    <span class="data-label">Sertlik:</span>
+                    <span class="data-value">${item.hardness ? item.hardness : "Ölçüm Yok"}</span>
+                </div>
+            </div>
+        </div>
+    `;
+    return popupContent;
+}
+
+function togglePhDetails(event) {
+    const detailsDiv = event.currentTarget.nextElementSibling;
+    const arrow = event.currentTarget.querySelector('.dropdown-arrow');
+    
+    if (detailsDiv.style.display === 'none') {
+        detailsDiv.style.display = 'block';
+        arrow.textContent = '▲';
+    } else {
+        detailsDiv.style.display = 'none';
+        arrow.textContent = '▼';
+    }
+}
+
+function loadPhData(item) {
+    return {
+        paper: item.ph_paper,
+        pen: item.ph_pen,
+        sutest: item.ph_sutest_indikator,
+        avg : {
+            paper: calculateAverage(item.ph_paper),
+            pen: calculateAverage(item.ph_pen),
+            sutest: calculateAverage(item.ph_sutest_indikator),
+            all: calculateAverage([].concat(item.ph_paper, item.ph_pen, item.ph_sutest_indikator))
+        }
+    };
+}
+
+function calculateAverage(arr) {
+    const sum = arr.reduce((a, b) => a + b, 0);
+    return (arr.length === 0) ? 0 : (sum / arr.length).toFixed(1);
+}
+
+function getColorForPh(value) {
+    // Full color spectrum mapped to drinking water pH range (5-9)
+    // Red -> Orange -> Yellow -> Green -> Cyan -> Blue -> Violet
+    
+    // Clamp value to range
+    const minPh = 5;
+    const maxPh = 9;
+    const clampedValue = Math.max(minPh, Math.min(maxPh, value));
+    
+    // Normalize to 0-1 range
+    const normalized = (clampedValue - minPh) / (maxPh - minPh);
+    
+    // Define color stops across the spectrum
+    const colorStops = [
+        { pos: 0.0, r: 255, g: 0, b: 0 },       // Red (pH 5)
+        { pos: 0.167, r: 255, g: 127, b: 0 },   // Orange (pH 5.67)
+        { pos: 0.333, r: 255, g: 255, b: 0 },   // Yellow (pH 6.33)
+        { pos: 0.5, r: 0, g: 255, b: 0 },       // Green (pH 7)
+        { pos: 0.667, r: 0, g: 255, b: 255 },   // Cyan (pH 7.67)
+        { pos: 0.833, r: 0, g: 0, b: 255 },     // Blue (pH 8.33)
+        { pos: 1.0, r: 127, g: 0, b: 255 }      // Violet (pH 9)
+    ];
+    
+    // Find the two color stops to interpolate between
+    let lowerStop = colorStops[0];
+    let upperStop = colorStops[colorStops.length - 1];
+    
+    for (let i = 0; i < colorStops.length - 1; i++) {
+        if (normalized >= colorStops[i].pos && normalized <= colorStops[i + 1].pos) {
+            lowerStop = colorStops[i];
+            upperStop = colorStops[i + 1];
+            break;
+        }
+    }
+    
+    // Interpolate between the two color stops
+    const localNormalized = (normalized - lowerStop.pos) / (upperStop.pos - lowerStop.pos);
+    const r = Math.round(lowerStop.r + (upperStop.r - lowerStop.r) * localNormalized);
+    const g = Math.round(lowerStop.g + (upperStop.g - lowerStop.g) * localNormalized);
+    const b = Math.round(lowerStop.b + (upperStop.b - lowerStop.b) * localNormalized);
+    
+    // Convert to hex
+    return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+}
+
+function getColorForChlorine(value) {
+    // Smooth color interpolation for chlorine levels (0-0.3 mg/L)
+    // Blue (low) -> Green (optimal) -> Orange -> Red (high)
+    
+    const minChlorine = 0;
+    const maxChlorine = 0.3;
+    const clampedValue = Math.max(minChlorine, Math.min(maxChlorine, value));
+    
+    // Normalize to 0-1 range
+    const normalized = (clampedValue - minChlorine) / (maxChlorine - minChlorine);
+    
+    // Define color stops
+    const colorStops = [
+        { pos: 0.0, r: 33, g: 150, b: 243 },      // Blue (0)
+        { pos: 0.167, r: 76, g: 175, b: 80 },     // Green (0.05)
+        { pos: 0.5, r: 76, g: 175, b: 80 },       // Green (0.15)
+        { pos: 0.667, r: 255, g: 152, b: 0 },     // Orange (0.2)
+        { pos: 1.0, r: 244, g: 67, b: 54 }        // Red (0.3)
+    ];
+    
+    // Find the two color stops to interpolate between
+    let lowerStop = colorStops[0];
+    let upperStop = colorStops[colorStops.length - 1];
+    
+    for (let i = 0; i < colorStops.length - 1; i++) {
+        if (normalized >= colorStops[i].pos && normalized <= colorStops[i + 1].pos) {
+            lowerStop = colorStops[i];
+            upperStop = colorStops[i + 1];
+            break;
+        }
+    }
+    
+    // Interpolate between the two color stops
+    const localNormalized = (normalized - lowerStop.pos) / (upperStop.pos - lowerStop.pos);
+    const r = Math.round(lowerStop.r + (upperStop.r - lowerStop.r) * localNormalized);
+    const g = Math.round(lowerStop.g + (upperStop.g - lowerStop.g) * localNormalized);
+    const b = Math.round(lowerStop.b + (upperStop.b - lowerStop.b) * localNormalized);
+    
+    // Convert to hex
+    return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+}
+
+function getColorForHardness(value) {
+    // Smooth color interpolation for water hardness (0-40 °dH)
+    // Very Light Blue (very soft) -> Light Blue (soft) -> Yellow -> Orange -> Purple (hard)
+    
+    const minHardness = 0;
+    const maxHardness = 40;
+    const clampedValue = Math.max(minHardness, Math.min(maxHardness, value));
+    
+    // Normalize to 0-1 range
+    const normalized = (clampedValue - minHardness) / (maxHardness - minHardness);
+    
+    // Define color stops
+    const colorStops = [
+        { pos: 0.0, r: 227, g: 242, b: 253 },     // Very Light Blue (0)
+        { pos: 0.375, r: 100, g: 181, b: 246 },   // Light Blue (15)
+        { pos: 0.625, r: 255, g: 193, b: 7 },     // Yellow (25)
+        { pos: 0.875, r: 255, g: 167, b: 38 },    // Orange (35)
+        { pos: 1.0, r: 156, g: 39, b: 176 }       // Purple (40)
+    ];
+    
+    // Find the two color stops to interpolate between
+    let lowerStop = colorStops[0];
+    let upperStop = colorStops[colorStops.length - 1];
+    
+    for (let i = 0; i < colorStops.length - 1; i++) {
+        if (normalized >= colorStops[i].pos && normalized <= colorStops[i + 1].pos) {
+            lowerStop = colorStops[i];
+            upperStop = colorStops[i + 1];
+            break;
+        }
+    }
+    
+    // Interpolate between the two color stops
+    const localNormalized = (normalized - lowerStop.pos) / (upperStop.pos - lowerStop.pos);
+    const r = Math.round(lowerStop.r + (upperStop.r - lowerStop.r) * localNormalized);
+    const g = Math.round(lowerStop.g + (upperStop.g - lowerStop.g) * localNormalized);
+    const b = Math.round(lowerStop.b + (upperStop.b - lowerStop.b) * localNormalized);
+    
+    // Convert to hex
+    return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+}
+
+function createCircleMarkers(data) {
+    data.forEach(item => {
+        const lat = item.coordinates.latitude;
+        const lng = item.coordinates.longitude;
+        
+        // pH Circle Marker
+        const phData = loadPhData(item);
+        const phValue = parseFloat(phData.avg.all);
+        const phCircle = L.circleMarker([lat, lng], {
+            radius: 12,
+            fillColor: getColorForPh(phValue),
+            color: '#fff',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        });
+        phCircle.on('click', function() {
+            phCircle.bindPopup(createPopup(item)).openPopup();
+        });
+        circleMarkers.ph.push(phCircle);
+        
+        // Chlorine Circle Marker
+        const chlorineValue = item.klor || 0;
+        const chlorineCircle = L.circleMarker([lat, lng], {
+            radius: 12,
+            fillColor: getColorForChlorine(chlorineValue),
+            color: '#fff',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        });
+        chlorineCircle.on('click', function() {
+            chlorineCircle.bindPopup(createPopup(item)).openPopup();
+        });
+        circleMarkers.chlorine.push(chlorineCircle);
+        
+        // Hardness Circle Marker
+        const hardnessValue = item.hardness || 0;
+        const hardnessCircle = L.circleMarker([lat, lng], {
+            radius: 12,
+            fillColor: getColorForHardness(hardnessValue),
+            color: '#fff',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        });
+        hardnessCircle.on('click', function() {
+            hardnessCircle.bindPopup(createPopup(item)).openPopup();
+        });
+        circleMarkers.hardness.push(hardnessCircle);
+    });
+}
+
+// Inverse Distance Weighting interpolation
+function interpolateValue(lat, lng, dataPoints, getValue, power = 2) {
+    let weightedSum = 0;
+    let weightSum = 0;
+    let minDistance = Infinity;
+    
+    dataPoints.forEach(point => {
+        const distance = Math.sqrt(
+            Math.pow(lat - point.coordinates.latitude, 2) + 
+            Math.pow(lng - point.coordinates.longitude, 2)
+        );
+        
+        minDistance = Math.min(minDistance, distance);
+        
+        // Avoid division by zero for exact points
+        if (distance < 0.00001) {
+            weightedSum = getValue(point);
+            weightSum = 1;
+            return;
+        }
+        
+        const weight = 1 / Math.pow(distance, power);
+        weightedSum += weight * getValue(point);
+        weightSum += weight;
+    });
+    
+    return weightSum > 0 ? weightedSum / weightSum : 0;
+}
+
+function createInterpolationLayers(data) {
+    // Calculate bounds of data points with buffer
+    let minLat = Infinity, maxLat = -Infinity;
+    let minLng = Infinity, maxLng = -Infinity;
+    
+    data.forEach(item => {
+        minLat = Math.min(minLat, item.coordinates.latitude);
+        maxLat = Math.max(maxLat, item.coordinates.latitude);
+        minLng = Math.min(minLng, item.coordinates.longitude);
+        maxLng = Math.max(maxLng, item.coordinates.longitude);
+    });
+    
+    // Add 20% buffer around data points
+    const latBuffer = (maxLat - minLat) * 0.2;
+    const lngBuffer = (maxLng - minLng) * 0.2;
+    
+    const dataBounds = {
+        minLat: minLat - latBuffer,
+        maxLat: maxLat + latBuffer,
+        minLng: minLng - lngBuffer,
+        maxLng: maxLng + lngBuffer
+    };
+    
+    // Create canvas layers for interpolation
+    var CanvasLayer = L.GridLayer.extend({
+        createTile: function(coords) {
+            var tile = L.DomUtil.create('canvas', 'leaflet-tile');
+            var ctx = tile.getContext('2d');
+            var size = this.getTileSize();
+            tile.width = size.x;
+            tile.height = size.y;
+            
+            const tileNW = this._map.unproject([coords.x * size.x, coords.y * size.y], coords.z);
+            const tileSE = this._map.unproject([(coords.x + 1) * size.x, (coords.y + 1) * size.y], coords.z);
+            
+            // Check if tile is within data bounds
+            if (tileSE.lat > dataBounds.maxLat || tileNW.lat < dataBounds.minLat ||
+                tileSE.lng < dataBounds.minLng || tileNW.lng > dataBounds.maxLng) {
+                return tile; // Return empty tile if outside bounds
+            }
+            
+            const getValue = this.options.getValue;
+            const getColor = this.options.getColor;
+            const step = 4; // Balance between performance and smoothness
+            
+            for (let x = 0; x < size.x; x += step) {
+                for (let y = 0; y < size.y; y += step) {
+                    const lng = tileNW.lng + (x / size.x) * (tileSE.lng - tileNW.lng);
+                    const lat = tileNW.lat + (y / size.y) * (tileSE.lat - tileNW.lat);
+                    
+                    // Skip if outside data bounds
+                    if (lat < dataBounds.minLat || lat > dataBounds.maxLat ||
+                        lng < dataBounds.minLng || lng > dataBounds.maxLng) {
+                        continue;
+                    }
+                    
+                    const value = interpolateValue(lat, lng, data, getValue);
+                    const color = getColor(value);
+                    
+                    ctx.fillStyle = color;
+                    ctx.globalAlpha = 0.6;
+                    ctx.fillRect(x, y, step, step);
+                }
+            }
+            
+            return tile;
+        }
+    });
+    
+    // pH interpolation layer
+    interpolationLayers.ph = new CanvasLayer({
+        opacity: 0.6,
+        getValue: function(item) {
+            const phData = loadPhData(item);
+            return parseFloat(phData.avg.all);
+        },
+        getColor: getColorForPh
+    });
+    
+    // Chlorine interpolation layer
+    interpolationLayers.chlorine = new CanvasLayer({
+        opacity: 0.6,
+        getValue: function(item) {
+            return item.klor || 0;
+        },
+        getColor: getColorForChlorine
+    });
+    
+    // Hardness interpolation layer
+    interpolationLayers.hardness = new CanvasLayer({
+        opacity: 0.6,
+        getValue: function(item) {
+            return item.hardness || 0;
+        },
+        getColor: getColorForHardness
+    });
+}
+
+function createLayerControl() {
+    console.log('Creating layer control...');
+    
+    // Create custom control
+    var LayerControl = L.Control.extend({
+        options: {
+            position: 'bottomleft'
+        },
+        
+        onAdd: function(map) {
+            var container = L.DomUtil.create('div', 'layer-control');
+            
+            container.innerHTML = `
+                <div class="layer-control-title">Veri Katmanları</div>
+                <button class="layer-btn" data-layer="none">
+                    <span class="btn-icon"><i class="fas fa-map-marker-alt"></i></span>
+                    <span class="btn-label">Sadece İşaretler</span>
+                </button>
+                
+                <button class="layer-btn" data-layer="ph-interp" data-type="interpolation">
+                    <span class="btn-icon"><i class="fas fa-vial"></i></span>
+                    <span class="btn-label">pH Tahmini</span>
+                </button>
+                <button class="layer-btn" data-layer="chlorine-interp" data-type="interpolation">
+                    <span class="btn-icon"><i class="fas fa-tint"></i></span>
+                    <span class="btn-label">Klor Tahmini</span>
+                </button>
+                <button class="layer-btn" data-layer="hardness-interp" data-type="interpolation">
+                    <span class="btn-icon"><i class="fas fa-filter"></i></span>
+                    <span class="btn-label">Sertlik Tahmini</span>
+                </button>
+                <div class="layer-legend" id="legend" style="display: none;"></div>
+            `;
+            
+            // Prevent map interactions on control
+            L.DomEvent.disableClickPropagation(container);
+            L.DomEvent.disableScrollPropagation(container);
+            
+            // Add click handlers
+            setTimeout(function() {
+                var buttons = container.querySelectorAll('.layer-btn');
+                console.log('Found buttons:', buttons.length);
+                
+                buttons.forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        var layer = this.getAttribute('data-layer');
+                        console.log('Toggling layer:', layer);
+                        toggleLayer(layer);
+                        
+                        // Update active state
+                        buttons.forEach(function(b) {
+                            b.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                    });
+                });
+                
+                // Set default active
+                buttons[0].classList.add('active');
+            }, 100);
+            
+            console.log('Control created successfully');
+            return container;
+        }
+    });
+    
+    map.addControl(new LayerControl());
+    console.log('Control added to map');
+}
+
+function toggleLayer(layerName) {
+    // Update current layer name
+    currentLayerName = layerName;
+    
+    // Remove current circle layer
+    if (currentLayer) {
+        currentLayer.forEach(circle => map.removeLayer(circle));
+        currentLayer = null;
+    }
+    
+    // Remove current interpolation layer
+    if (currentInterpolation) {
+        map.removeLayer(currentInterpolation);
+        currentInterpolation = null;
+    }
+    
+    // Handle different layer types
+    if (layerName === 'none') {
+        markersLayer.addTo(map);
+        document.getElementById('legend').style.display = 'none';
+    } else if (layerName.endsWith('-interp')) {
+        // Interpolation layer
+        map.removeLayer(markersLayer);
+        const baseLayer = layerName.replace('-interp', '');
+        
+        if (interpolationLayers[baseLayer]) {
+            currentInterpolation = interpolationLayers[baseLayer];
+            currentInterpolation.addTo(map);
+            
+            // Also show circle markers on top for reference
+            if (circleMarkers[baseLayer]) {
+                currentLayer = circleMarkers[baseLayer];
+                currentLayer.forEach(circle => circle.addTo(map));
+            }
+            
+            showLegend(baseLayer);
+        }
+    } else {
+        // Circle markers only
+        map.removeLayer(markersLayer);
+        
+        if (circleMarkers[layerName]) {
+            currentLayer = circleMarkers[layerName];
+            currentLayer.forEach(circle => circle.addTo(map));
+            showLegend(layerName);
+        }
+    }
+}
+
+function showLegend(layerName) {
+    const legend = document.getElementById('legend');
+    let legendHTML = '<div class="legend-title">Renk Ölçeği:</div>';
+    
+    if (layerName === 'ph') {
+        legendHTML += `
+            <div class="legend-item"><span class="legend-color" style="background: #ff0000;"></span> 5.0-5.5 (Çok Asidik)</div>
+            <div class="legend-item"><span class="legend-color" style="background: #ff7f00;"></span> 5.5-6.0 (Asidik)</div>
+            <div class="legend-item"><span class="legend-color" style="background: #ffff00;"></span> 6.0-6.5 (Hafif Asidik)</div>
+            <div class="legend-item"><span class="legend-color" style="background: #7fff00;"></span> 6.5-7.0 (Nötr'e Yakın)</div>
+            <div class="legend-item"><span class="legend-color" style="background: #00ff00;"></span> 7.0-7.5 (Nötr)</div>
+            <div class="legend-item"><span class="legend-color" style="background: #00ff7f;"></span> 7.5-8.0 (Nötr)</div>
+            <div class="legend-item"><span class="legend-color" style="background: #00ffff;"></span> 8.0-8.5 (Hafif Alkali)</div>
+            <div class="legend-item"><span class="legend-color" style="background: #0000ff;"></span> 8.5-9.0 (Alkali)</div>
+            <div class="legend-item"><span class="legend-color" style="background: #7f00ff;"></span> > 9.0 (Çok Alkali)</div>
+        `;
+    } else if (layerName === 'chlorine') {
+        legendHTML += `
+            <div class="legend-item"><span class="legend-color" style="background: #2196F3;"></span> < 0.05 (Düşük)</div>
+            <div class="legend-item"><span class="legend-color" style="background: #4CAF50;"></span> 0.05-0.15 (İyi)</div>
+            <div class="legend-item"><span class="legend-color" style="background: #FF9800;"></span> 0.15-0.25</div>
+            <div class="legend-item"><span class="legend-color" style="background: #F44336;"></span> > 0.25 (Yüksek)</div>
+        `;
+    } else if (layerName === 'hardness') {
+        legendHTML += `
+            <div class="legend-item"><span class="legend-color" style="background: #E3F2FD;"></span> < 15 (Çok Yumuşak)</div>
+            <div class="legend-item"><span class="legend-color" style="background: #64B5F6;"></span> 15-25 (Yumuşak)</div>
+            <div class="legend-item"><span class="legend-color" style="background: #FFA726;"></span> 25-35 (Orta)</div>
+            <div class="legend-item"><span class="legend-color" style="background: #9C27B0;"></span> > 35 (Sert)</div>
+        `;
+    }
+    
+    legend.innerHTML = legendHTML;
+    legend.style.display = 'block';
+}
+
+// Helper function to convert hex color to RGB
+function hexToRgb(hex) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : {r: 0, g: 0, b: 0};
+}

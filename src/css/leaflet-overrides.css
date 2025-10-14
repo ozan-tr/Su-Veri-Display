@@ -1,0 +1,97 @@
+/* Leaflet Popup Overrides */
+.leaflet-popup-content-wrapper {
+    padding: 0 !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+.leaflet-popup-content {
+    margin: 0 !important;
+    width: 300px !important;
+    max-width: 300px !important;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+    width: 32px !important;
+    height: 32px !important;
+}
+
+.leaflet-popup {
+    margin-bottom: 20px !important;
+}
+
+.leaflet-popup-tip-container {
+    display: none;
+}
+
+/* Close Button Styling */
+.leaflet-popup-close-button {
+    position: absolute !important;
+    top: 8px !important;
+    right: 8px !important;
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    color: white !important;
+    font-size: 28px !important;
+    font-weight: 400 !important;
+    line-height: 32px !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    background-color: rgba(255, 255, 255, 0.25) !important;
+    border-radius: 50% !important;
+    border: 2px solid rgba(255, 255, 255, 0.4) !important;
+    transition: all 0.2s ease !important;
+    z-index: 1000 !important;
+    opacity: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.leaflet-popup-close-button span {
+    color: white !important;
+    opacity: 1 !important;
+}
+
+.leaflet-popup-close-button:hover {
+    background-color: rgba(255, 255, 255, 0.4) !important;
+    transform: scale(1.1) !important;
+    border-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.leaflet-popup-close-button:active {
+    transform: scale(0.95) !important;
+}
+
+/* Layer Control Positioning */
+.leaflet-bottom.leaflet-left {
+    z-index: 9999 !important;
+    pointer-events: auto !important;
+}
+
+.leaflet-bottom.leaflet-left .leaflet-control {
+    margin: 0 0 10px 10px !important;
+    clear: both;
+}
+
+/* Attribution positioning */
+.leaflet-control-attribution {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: auto !important;
+}
+
+/* Smooth interpolation tiles */
+.leaflet-tile {
+    image-rendering: auto;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+canvas.leaflet-tile {
+    image-rendering: auto !important;
+}

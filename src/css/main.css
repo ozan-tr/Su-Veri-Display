@@ -1,0 +1,15 @@
+@import url("components/popup.css");
+@import url("components/layerControl.css");
+@import url("components/legend.css");
+@import url("leaflet-overrides.css");
+@import url("responsive.css");
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+#map {
+  height: 100%;
+  width: 100%;
+}
