@@ -16,6 +16,11 @@ function interpolateValue(lat, lng, dataPoints, getValue, power = 2) {
     let weightedSum = 0;
     let weightSum = 0;
     
+    // Use only nearest points for better performance
+    const maxPoints = 8; // Only use 8 closest points
+    const distances = [];
+    
+    // Calculate all distances
     for (const point of dataPoints) {
         const distance = Math.sqrt(
             Math.pow(lat - point.coordinates.latitude, 2) + 
@@ -27,6 +32,15 @@ function interpolateValue(lat, lng, dataPoints, getValue, power = 2) {
             return getValue(point);
         }
         
+        distances.push({ point, distance });
+    }
+    
+    // Sort by distance and take only nearest points
+    distances.sort((a, b) => a.distance - b.distance);
+    const nearestPoints = distances.slice(0, maxPoints);
+    
+    // Calculate weighted interpolation
+    for (const { point, distance } of nearestPoints) {
         const weight = 1 / Math.pow(distance, power);
         weightedSum += weight * getValue(point);
         weightSum += weight;

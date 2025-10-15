@@ -11,20 +11,28 @@ const state = {
     interpolationLayers: { ph: null, chlorine: null, hardness: null },
     currentLayer: null,
     currentInterpolation: null,
-    currentLayerName: 'none'
+    currentLayerName: 'none',
+    layerChangeTimeout: null
 };
 
 /**
  * Initialize the application
  */
 function initApp() {
-    // Initialize map
-    state.map = L.map('map').setView([41, 29], 10);
+    // Initialize map with performance settings
+    state.map = L.map('map', {
+        preferCanvas: true, // Use Canvas renderer for better performance
+        zoomAnimation: true,
+        fadeAnimation: true,
+        markerZoomAnimation: true
+    }).setView([41, 29], 10);
     
     // Add tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 20,
+        maxZoom: 18, // Reduced from 20 for better performance
         minZoom: 8,
+        updateWhenIdle: true, // Only update tiles when map is idle
+        keepBuffer: 2, // Reduce tile buffer
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(state.map);
     
@@ -59,6 +67,21 @@ function loadData() {
  * @param {string} layerName - Name of the layer to activate
  */
 function handleLayerChange(layerName) {
+    // Debounce rapid layer changes
+    if (state.layerChangeTimeout) {
+        clearTimeout(state.layerChangeTimeout);
+    }
+    
+    state.layerChangeTimeout = setTimeout(() => {
+        applyLayerChange(layerName);
+    }, 100);
+}
+
+/**
+ * Apply layer change
+ * @param {string} layerName - Name of the layer to activate
+ */
+function applyLayerChange(layerName) {
     // Update state
     state.currentLayerName = layerName;
     

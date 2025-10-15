@@ -11,8 +11,11 @@
 function createInterpolationLayers(data) {
     const dataBounds = calculateDataBounds(data);
     
+    // Pre-cache values and colors for better performance
+    const valueCache = new Map();
+    
     const CanvasLayer = L.GridLayer.extend({
-        createTile: function(coords) {
+        createTile: function(coords, done) {
             const tile = L.DomUtil.create('canvas', 'leaflet-tile');
             const ctx = tile.getContext('2d');
             const size = this.getTileSize();
@@ -25,31 +28,55 @@ function createInterpolationLayers(data) {
             // Skip tiles outside data bounds
             if (tileSE.lat > dataBounds.maxLat || tileNW.lat < dataBounds.minLat ||
                 tileSE.lng < dataBounds.minLng || tileNW.lng > dataBounds.maxLng) {
+                done(null, tile);
                 return tile;
             }
             
             const getValue = this.options.getValue;
             const getColor = this.options.getColor;
-            const step = 4; // Performance optimization
+            const step = 8; // Increased step size for better performance
             
-            for (let x = 0; x < size.x; x += step) {
-                for (let y = 0; y < size.y; y += step) {
-                    const lng = tileNW.lng + (x / size.x) * (tileSE.lng - tileNW.lng);
-                    const lat = tileNW.lat + (y / size.y) * (tileSE.lat - tileNW.lat);
-                    
-                    if (lat < dataBounds.minLat || lat > dataBounds.maxLat ||
-                        lng < dataBounds.minLng || lng > dataBounds.maxLng) {
-                        continue;
+            // Use requestAnimationFrame for async rendering
+            requestAnimationFrame(() => {
+                const imageData = ctx.createImageData(size.x, size.y);
+                const pixels = imageData.data;
+                
+                for (let x = 0; x < size.x; x += step) {
+                    for (let y = 0; y < size.y; y += step) {
+                        const lng = tileNW.lng + (x / size.x) * (tileSE.lng - tileNW.lng);
+                        const lat = tileNW.lat + (y / size.y) * (tileSE.lat - tileNW.lat);
+                        
+                        if (lat < dataBounds.minLat || lat > dataBounds.maxLat ||
+                            lng < dataBounds.minLng || lng > dataBounds.maxLng) {
+                            continue;
+                        }
+                        
+                        // Create cache key
+                        const cacheKey = `${Math.round(lat * 1000)},${Math.round(lng * 1000)}`;
+                        
+                        let color;
+                        if (valueCache.has(cacheKey)) {
+                            color = valueCache.get(cacheKey);
+                        } else {
+                            const value = interpolateValue(lat, lng, data, getValue);
+                            color = getColor(value);
+                            valueCache.set(cacheKey, color);
+                            
+                            // Limit cache size
+                            if (valueCache.size > 1000) {
+                                const firstKey = valueCache.keys().next().value;
+                                valueCache.delete(firstKey);
+                            }
+                        }
+                        
+                        ctx.fillStyle = color;
+                        ctx.globalAlpha = 0.6;
+                        ctx.fillRect(x, y, step, step);
                     }
-                    
-                    const value = interpolateValue(lat, lng, data, getValue);
-                    const color = getColor(value);
-                    
-                    ctx.fillStyle = color;
-                    ctx.globalAlpha = 0.6;
-                    ctx.fillRect(x, y, step, step);
                 }
-            }
+                
+                done(null, tile);
+            });
             
             return tile;
         }

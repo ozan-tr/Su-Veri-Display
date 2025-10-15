@@ -62,16 +62,24 @@ function createCircleMarkers(data, currentLayerName) {
  */
 function createCircleMarker(latlng, color, data, currentLayerName) {
     const circle = L.circleMarker(latlng, {
-        radius: 12,
+        radius: 10, // Slightly smaller for better performance
         fillColor: color,
         color: '#fff',
         weight: 2,
         opacity: 1,
-        fillOpacity: 0.8
+        fillOpacity: 0.8,
+        pane: 'markerPane' // Use dedicated pane for better layering
     });
     
+    // Bind popup lazily (only create when clicked)
     circle.on('click', function() {
-        circle.bindPopup(createPopup(data, currentLayerName)).openPopup();
+        if (!this._popup) {
+            this.bindPopup(createPopup(data, currentLayerName), {
+                maxWidth: 300,
+                className: 'custom-popup'
+            });
+        }
+        this.openPopup();
     });
     
     return circle;
