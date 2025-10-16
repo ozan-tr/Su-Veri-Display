@@ -35,11 +35,11 @@ function createOptionsMenu(map) {
                                 <i class="fas fa-eye"></i>
                             </span>
                         </button>
-                        <button class="option-item" data-target="map-view-control" data-state="visible">
+                        <button class="option-item disabled" data-target="map-view-control" data-state="hidden">
                             <span class="option-icon"><i class="fas fa-map"></i></span>
                             <span class="option-label">Harita Görünümü</span>
                             <span class="option-toggle">
-                                <i class="fas fa-eye"></i>
+                                <i class="fas fa-eye-slash"></i>
                             </span>
                         </button>
                     </div>
@@ -124,6 +124,14 @@ function createOptionsMenu(map) {
                     toggleBtn.classList.remove('active');
                 }
             });
+            
+            // Initialize: Hide map view control by default
+            setTimeout(() => {
+                const mapViewControl = document.querySelector('.map-view-control');
+                if (mapViewControl) {
+                    mapViewControl.style.display = 'none';
+                }
+            }, 100);
             
             return container;
         }
