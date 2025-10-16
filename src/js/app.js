@@ -27,14 +27,7 @@ function initApp() {
         markerZoomAnimation: true
     }).setView([41, 29], 10);
     
-    // Add tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 18, // Reduced from 20 for better performance
-        minZoom: 8,
-        updateWhenIdle: true, // Only update tiles when map is idle
-        keepBuffer: 2, // Reduce tile buffer
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(state.map);
+    // Note: Tile layer is now managed by mapViewControl component
     
     // Initialize markers layer
     state.markersLayer = L.layerGroup().addTo(state.map);
@@ -58,8 +51,10 @@ function loadData() {
     state.circleMarkers = createCircleMarkers(DATA, state.currentLayerName);
     state.interpolationLayers = createInterpolationLayers(DATA);
     
-    // Create layer control UI
+    // Create UI controls
     createLayerControl(state.map, handleLayerChange);
+    createMapViewControl(state.map).addTo(state.map);
+    createOptionsMenu(state.map).addTo(state.map);
 }
 
 /**

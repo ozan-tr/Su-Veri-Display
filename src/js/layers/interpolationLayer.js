@@ -46,8 +46,11 @@ function createInterpolationLayers(data) {
                         const lng = tileNW.lng + (x / size.x) * (tileSE.lng - tileNW.lng);
                         const lat = tileNW.lat + (y / size.y) * (tileSE.lat - tileNW.lat);
                         
-                        if (lat < dataBounds.minLat || lat > dataBounds.maxLat ||
-                            lng < dataBounds.minLng || lng > dataBounds.maxLng) {
+                        // Get opacity based on distance to envelope edge
+                        const opacity = dataBounds.getOpacity(lat, lng);
+                        
+                        // Skip if completely transparent
+                        if (opacity <= 0) {
                             continue;
                         }
                         
@@ -70,7 +73,8 @@ function createInterpolationLayers(data) {
                         }
                         
                         ctx.fillStyle = color;
-                        ctx.globalAlpha = 0.6;
+                        // Apply gradient opacity (base 0.6 * edge fade)
+                        ctx.globalAlpha = 0.6 * opacity;
                         ctx.fillRect(x, y, step, step);
                     }
                 }

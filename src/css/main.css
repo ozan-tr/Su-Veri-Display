@@ -1,5 +1,7 @@
 @import url("components/popup.css");
 @import url("components/layerControl.css");
+@import url("components/mapViewControl.css");
+@import url("components/optionsMenu.css");
 @import url("components/legend.css");
 @import url("leaflet-overrides.css");
 @import url("responsive.css");
