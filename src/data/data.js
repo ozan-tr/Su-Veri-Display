@@ -2,6 +2,7 @@ const DATA = [
   {
     NUMARA: 1,
     origin: "Florya",
+    type: "musluk",
     ph_paper: [6.0, 6.5],
     ph_pen: [],
     ph_sutest_indikator: [7.6],
@@ -14,6 +15,7 @@ const DATA = [
   {
     NUMARA: 2,
     origin: "Şişli",
+    type: "musluk",
     ph_paper: [6.0, 6.5],
     ph_pen: [],
     ph_sutest_indikator: [7.6],
@@ -26,6 +28,7 @@ const DATA = [
   {
     NUMARA: 3,
     origin: "Pendik",
+    type: "musluk",
     ph_paper: [6.5],
     ph_pen: [8.2],
     ph_sutest_indikator: [8.2],
@@ -38,6 +41,7 @@ const DATA = [
   {
     NUMARA: 4,
     origin: "Bağcılar",
+    type: "musluk",
     ph_paper: [6.5],
     ph_pen: [8.3],
     ph_sutest_indikator: [8.2],
@@ -50,6 +54,7 @@ const DATA = [
   {
     NUMARA: 5,
     origin: "Sarıyer",
+    type: "musluk",
     ph_paper: [5.5],
     ph_pen: [6.9],
     ph_sutest_indikator: [6.8],
@@ -62,6 +67,7 @@ const DATA = [
   {
     NUMARA: 6,
     origin: "Üsküdar",
+    type: "musluk",
     ph_paper: [7.0],
     ph_pen: [8.1],
     ph_sutest_indikator: [7.6],
@@ -74,6 +80,7 @@ const DATA = [
   {
     NUMARA: 7,
     origin: "Sarıyer",
+    type: "musluk",
     ph_paper: [6.5],
     ph_pen: [],
     ph_sutest_indikator: [7.8],
@@ -86,6 +93,7 @@ const DATA = [
   {
     NUMARA: 8,
     origin: "Maltepe",
+    type: "musluk",
     ph_paper: [6.5],
     ph_pen: [7.4],
     ph_sutest_indikator: [7.6],
@@ -98,6 +106,7 @@ const DATA = [
   {
     NUMARA: 9,
     origin: "Şişli",
+    type: "musluk",
     ph_paper: [6.5],
     ph_pen: [7.8],
     ph_sutest_indikator: [7.6],
@@ -110,6 +119,7 @@ const DATA = [
   {
     NUMARA: 10,
     origin: "St. Benoit su sebili",
+    type: "su sebili",
     ph_paper: [5.0],
     ph_pen: [7.0],
     ph_sutest_indikator: [6.8],
@@ -122,6 +132,7 @@ const DATA = [
   {
     NUMARA: 11,
     origin: "Göztepe",
+    type: "musluk",
     ph_paper: [7.0],
     ph_pen: [8.1],
     ph_sutest_indikator: [8.2],
@@ -134,6 +145,7 @@ const DATA = [
   {
     NUMARA: 12,
     origin: "Şişli",
+    type: "musluk",
     ph_paper: [6.5],
     ph_pen: [7.6],
     ph_sutest_indikator: [7.6],
@@ -146,6 +158,7 @@ const DATA = [
   {
     NUMARA: 13,
     origin: "Yeşilköy",
+    type: "musluk",
     ph_paper: [7.0],
     ph_pen: [8.1],
     ph_sutest_indikator: [8.2],
@@ -158,6 +171,7 @@ const DATA = [
   {
     NUMARA: 14,
     origin: "Sarıyer",
+    type: "musluk",
     ph_paper: [6.0],
     ph_pen: [7.8],
     ph_sutest_indikator: [7.6],
@@ -170,6 +184,7 @@ const DATA = [
   {
     NUMARA: 15,
     origin: "Ümraniye",
+    type: "musluk",
     ph_paper: [7.0],
     ph_pen: [7.9],
     ph_sutest_indikator: [8.2],
@@ -182,6 +197,7 @@ const DATA = [
   {
     NUMARA: 16,
     origin: "Şişli",
+    type: "musluk",
     ph_paper: [6.5],
     ph_pen: [7.8],
     ph_sutest_indikator: [7.6],
@@ -194,6 +210,7 @@ const DATA = [
   {
     NUMARA: 17,
     origin: "Halkalı",
+    type: "musluk",
     ph_paper: [6.5],
     ph_pen: [7.5],
     ph_sutest_indikator: [7.4, 7.6],
@@ -206,6 +223,7 @@ const DATA = [
   {
     NUMARA: 18,
     origin: "Ümraniye",
+    type: "musluk",
     ph_paper: [7.0],
     ph_pen: [],
     ph_sutest_indikator: [8.2],
@@ -218,6 +236,7 @@ const DATA = [
   {
     NUMARA: 19,
     origin: "Sancaktepe",
+    type: "musluk",
     ph_paper: [6.5],
     ph_pen: [7.9],
     ph_sutest_indikator: [7.6],
@@ -230,6 +249,7 @@ const DATA = [
   {
     NUMARA: 20,
     origin: "Gayrettepe",
+    type: "musluk",
     ph_paper: [6.5],
     ph_pen: [7.5],
     ph_sutest_indikator: [7.6],
@@ -242,6 +262,7 @@ const DATA = [
   {
     NUMARA: 21,
     origin: "Ataşehir",
+    type: "musluk",
     ph_paper: [7.0],
     ph_pen: [8.0],
     ph_sutest_indikator: [8.2],
@@ -254,6 +275,7 @@ const DATA = [
   {
     NUMARA: 22,
     origin: "Arnavutköy",
+    type: "musluk",
     ph_paper: [6.5],
     ph_pen: [],
     ph_sutest_indikator: [7.8],
@@ -266,6 +288,7 @@ const DATA = [
   {
     NUMARA: 23,
     origin: "Beşiktaş",
+    type: "musluk",
     ph_paper: [6.5],
     ph_pen: [],
     ph_sutest_indikator: [7.6],
@@ -278,6 +301,7 @@ const DATA = [
   {
     NUMARA: 24,
     origin: "St. Benoit musluk suyu",
+    type: "musluk",
     ph_paper: [6.5],
     ph_pen: [7.6],
     ph_sutest_indikator: [7.6],
@@ -290,6 +314,7 @@ const DATA = [
   {
     NUMARA: 25,
     origin: "Sarıyer",
+    type: "musluk",
     ph_paper: [6.0],
     ph_pen: [7.6],
     ph_sutest_indikator: [7.0],
@@ -302,6 +327,7 @@ const DATA = [
   {
     NUMARA: 26,
     origin: "Kadıköy",
+    type: "musluk",
     ph_paper: [6.0],
     ph_pen: [7.75],
     ph_sutest_indikator: [7.2],
@@ -314,6 +340,7 @@ const DATA = [
   {
     NUMARA: 27,
     origin: "Maltepe",
+    type: "musluk",
     ph_paper: [6.5],
     ph_pen: [],
     ph_sutest_indikator: [7.4],
@@ -326,6 +353,7 @@ const DATA = [
   {
     NUMARA: 28,
     origin: "Kadıköy",
+    type: "musluk",
     ph_paper: [6.5],
     ph_pen: [7.9],
     ph_sutest_indikator: [7.0],
@@ -338,6 +366,7 @@ const DATA = [
   {
     NUMARA: 29,
     origin: "Göztepe",
+    type: "musluk",
     ph_paper: [6.5],
     ph_pen: [],
     ph_sutest_indikator: [7.4],
@@ -350,6 +379,7 @@ const DATA = [
   {
     NUMARA: 30,
     origin: "Kadıköy",
+    type: "musluk",
     ph_paper: [6.5],
     ph_pen: [],
     ph_sutest_indikator: [7.2],
@@ -362,6 +392,7 @@ const DATA = [
   {
     NUMARA: 31,
     origin: "Erenköy (Kadıköy)",
+    type: "musluk",
     ph_paper: [6.5],
     ph_pen: [7.8],
     ph_sutest_indikator: [7.4, 7.6],
@@ -374,6 +405,7 @@ const DATA = [
   {
     NUMARA: 32,
     origin: "Şişli",
+    type: "musluk",
     ph_paper: [6.0],
     ph_pen: [7.8],
     ph_sutest_indikator: [7.6],
@@ -386,6 +418,7 @@ const DATA = [
   {
     NUMARA: 33,
     origin: "Yeşilköy-arıtma",
+    type: "musluk",
     ph_paper: [5.5],
     ph_pen: [7.3],
     ph_sutest_indikator: [6.8],
@@ -398,6 +431,7 @@ const DATA = [
   {
     NUMARA: 34,
     origin: "Beşiktaş",
+    type: "musluk",
     ph_paper: [6.0],
     ph_pen: [],
     ph_sutest_indikator: [7.8],
@@ -410,6 +444,7 @@ const DATA = [
   {
     NUMARA: 36,
     origin: "Bayrampaşa",
+    type: "musluk",
     ph_paper: [6.0],
     ph_pen: [7.9],
     ph_sutest_indikator: [7.8],
@@ -422,6 +457,7 @@ const DATA = [
   {
     NUMARA: 37,
     origin: "Şişli",
+    type: "musluk",
     ph_paper: [6.0],
     ph_pen: [7.7],
     ph_sutest_indikator: [7.8],
@@ -434,6 +470,7 @@ const DATA = [
   {
     NUMARA: 38,
     origin: "Kadıköy",
+    type: "musluk",
     ph_paper: [6.5],
     ph_pen: [],
     ph_sutest_indikator: [8.2],
@@ -446,6 +483,7 @@ const DATA = [
   {
     NUMARA: 39,
     origin: "Üsküdar",
+    type: "musluk",
     ph_paper: [6.0],
     ph_pen: [8.0],
     ph_sutest_indikator: [7.6],
@@ -458,6 +496,7 @@ const DATA = [
   {
     NUMARA: 40,
     origin: "Kartal",
+    type: "musluk",
     ph_paper: [],
     ph_pen: [7.2],
     ph_sutest_indikator: [7.0],

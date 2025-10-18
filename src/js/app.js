@@ -12,7 +12,8 @@ const state = {
     currentLayer: null,
     currentInterpolation: null,
     currentLayerName: 'none',
-    layerChangeTimeout: null
+    layerChangeTimeout: null,
+    markerDisplayType: 'icons' // 'icons' or 'circles'
 };
 
 /**
@@ -40,15 +41,43 @@ function initApp() {
  * Load and process water quality data
  */
 function loadData() {
-    // Add basic markers
+    // Add icon-based markers that show type
     DATA.forEach(item => {
-        const marker = L.marker([item.coordinates.latitude, item.coordinates.longitude]);
+        const type = item.type || 'musluk';
+        const lat = item.coordinates.latitude;
+        const lng = item.coordinates.longitude;
+        
+        // Create marker with icon based on type
+        let iconClass = 'fa-solid fa-droplet'; // Default
+        if (type === 'su sebili') {
+            iconClass = 'fa-solid fa-water';
+        } else if (type === 'arıtma') {
+            iconClass = 'fa-solid fa-filter';
+        } else if (type === 'musluk') {
+            iconClass = 'fa-solid fa-faucet';
+        }
+        
+        const icon = L.divIcon({
+            html: `<i class="${iconClass}" style="color: #3388ff; font-size: 24px;"></i>`,
+            className: 'custom-marker-icon',
+            iconSize: [30, 30],
+            iconAnchor: [15, 15],
+            popupAnchor: [0, -15]
+        });
+        
+        const marker = L.marker([lat, lng], { icon: icon });
+        
+        // Bind popup immediately so it works when clicked
+        marker.bindPopup(createPopup(item, state.currentLayerName), {
+            maxWidth: 300,
+            className: 'custom-popup'
+        });
+        
         state.markersLayer.addLayer(marker);
-        marker.bindPopup(createPopup(item, state.currentLayerName));
     });
     
     // Create visualization layers
-    state.circleMarkers = createCircleMarkers(DATA, state.currentLayerName);
+    state.circleMarkers = createCircleMarkers(DATA, state.currentLayerName, state.markerDisplayType);
     state.interpolationLayers = createInterpolationLayers(DATA);
     
     // Create UI controls
@@ -108,6 +137,82 @@ function applyLayerChange(layerName) {
         state.currentLayer.forEach(circle => circle.addTo(state.map));
         
         showLegend(baseLayer);
+    }
+}
+
+/**
+ * Toggle marker display type between icons and circles
+ * @param {string} displayType - 'icons' or 'circles'
+ */
+function toggleMarkerDisplayType(displayType) {
+    state.markerDisplayType = displayType;
+    
+    // Clear current markers layer
+    state.markersLayer.clearLayers();
+    
+    // Recreate default markers based on display type
+    DATA.forEach(item => {
+        const type = item.type || 'musluk';
+        const lat = item.coordinates.latitude;
+        const lng = item.coordinates.longitude;
+        
+        let marker;
+        
+        if (displayType === 'icons') {
+            // Create icon-based marker
+            let iconClass = 'fa-solid fa-droplet';
+            if (type === 'su sebili') {
+                iconClass = 'fa-solid fa-water';
+            } else if (type === 'arıtma') {
+                iconClass = 'fa-solid fa-filter';
+            } else if (type === 'musluk') {
+                iconClass = 'fa-solid fa-faucet';
+            }
+            
+            const icon = L.divIcon({
+                html: `<i class="${iconClass}" style="color: #3388ff; font-size: 24px;"></i>`,
+                className: 'custom-marker-icon',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15],
+                popupAnchor: [0, -15]
+            });
+            
+            marker = L.marker([lat, lng], { icon: icon });
+        } else {
+            // Create simple circle marker
+            marker = L.circleMarker([lat, lng], {
+                radius: 8,
+                fillColor: '#3388ff',
+                color: '#fff',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.8
+            });
+        }
+        
+        // Bind popup
+        marker.bindPopup(createPopup(item, state.currentLayerName), {
+            maxWidth: 300,
+            className: 'custom-popup'
+        });
+        
+        state.markersLayer.addLayer(marker);
+    });
+    
+    // Recreate circle markers for visualization layers
+    state.circleMarkers = createCircleMarkers(DATA, state.currentLayerName, displayType);
+    
+    // Re-apply current layer to update displayed markers
+    if (state.currentLayerName !== 'none') {
+        // Remove old layer markers
+        if (state.currentLayer) {
+            state.currentLayer.forEach(circle => state.map.removeLayer(circle));
+        }
+        
+        // Apply new layer markers
+        const baseLayer = state.currentLayerName.replace('-interp', '');
+        state.currentLayer = state.circleMarkers[baseLayer];
+        state.currentLayer.forEach(circle => circle.addTo(state.map));
     }
 }
 

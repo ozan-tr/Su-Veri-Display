@@ -10,27 +10,48 @@
 function createMapViewControl(map) {
     const MapViewControl = L.Control.extend({
         options: {
-            position: 'topright'
+            position: 'bottomleft'
         },
         
         onAdd: function() {
             const container = L.DomUtil.create('div', 'map-view-control');
             
-            container.innerHTML = `
-                <div class="map-view-title">Harita Görünümü</div>
-                <button class="map-view-btn active" data-view="street" title="Sokak Haritası">
-                    <span class="view-icon"><i class="fas fa-map"></i></span>
-                    <span class="view-label">Sokak</span>
-                </button>
-                <button class="map-view-btn" data-view="minimal" title="Minimal Harita">
-                    <span class="view-icon"><i class="fas fa-map-marked"></i></span>
-                    <span class="view-label">Minimal</span>
-                </button>
-                <button class="map-view-btn" data-view="satellite" title="Uydu Görünümü">
-                    <span class="view-icon"><i class="fas fa-satellite"></i></span>
-                    <span class="view-label">Uydu</span>
-                </button>
-            `;
+            const updateContent = () => {
+                container.innerHTML = `
+                    <div class="map-view-title">${getText('mapViewTitle')}</div>
+                    <button class="map-view-btn active" data-view="street" title="${getText('streetMapTooltip')}">
+                        <span class="view-icon"><i class="fas fa-map"></i></span>
+                        <span class="view-label">${getText('streetMap')}</span>
+                    </button>
+                    <button class="map-view-btn" data-view="minimal" title="${getText('minimalMapTooltip')}">
+                        <span class="view-icon"><i class="fas fa-map-marked"></i></span>
+                        <span class="view-label">${getText('minimalMap')}</span>
+                    </button>
+                    <button class="map-view-btn" data-view="satellite" title="${getText('satelliteMapTooltip')}">
+                        <span class="view-icon"><i class="fas fa-satellite"></i></span>
+                        <span class="view-label">${getText('satelliteMap')}</span>
+                    </button>
+                `;
+                
+                // Re-attach event listeners
+                const buttons = container.querySelectorAll('.map-view-btn');
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const view = this.getAttribute('data-view');
+                        
+                        // Update active state
+                        buttons.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        // Switch tile layer
+                        if (currentLayer) {
+                            map.removeLayer(currentLayer);
+                        }
+                        currentLayer = tileLayers[view];
+                        currentLayer.addTo(map);
+                    });
+                });
+            };
             
             // Prevent map interactions on control
             L.DomEvent.disableClickPropagation(container);
@@ -62,25 +83,14 @@ function createMapViewControl(map) {
             };
             
             // Add default layer
-            let currentTileLayer = tileLayers.street;
-            currentTileLayer.addTo(map);
+            let currentLayer = tileLayers.street;
+            currentLayer.addTo(map);
             
-            // Add click handlers
-            const buttons = container.querySelectorAll('.map-view-btn');
-            buttons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const viewType = this.getAttribute('data-view');
-                    
-                    // Update active state
-                    buttons.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Switch tile layer
-                    map.removeLayer(currentTileLayer);
-                    currentTileLayer = tileLayers[viewType];
-                    currentTileLayer.addTo(map);
-                });
-            });
+            // Initial content
+            updateContent();
+            
+            // Listen for language changes
+            window.addEventListener('languageChanged', updateContent);
             
             return container;
         }

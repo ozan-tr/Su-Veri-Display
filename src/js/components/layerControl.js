@@ -17,45 +17,49 @@ function createLayerControl(map, onLayerChange) {
         onAdd: function() {
             const container = L.DomUtil.create('div', 'layer-control');
             
-            container.innerHTML = `
-                <div class="layer-control-title">Veri Katmanları</div>
-                <button class="layer-btn active" data-layer="none">
-                    <span class="btn-icon"><i class="fas fa-map-marker-alt"></i></span>
-                    <span class="btn-label">Normal</span>
-                </button>
-                <button class="layer-btn" data-layer="ph-interp">
-                    <span class="btn-icon"><i class="fas fa-vial"></i></span>
-                    <span class="btn-label">pH</span>
-                </button>
-                <button class="layer-btn" data-layer="chlorine-interp">
-                    <span class="btn-icon"><i class="fas fa-tint"></i></span>
-                    <span class="btn-label">Klor</span>
-                </button>
-                <button class="layer-btn" data-layer="hardness-interp">
-                    <span class="btn-icon"><i class="fas fa-filter"></i></span>
-                    <span class="btn-label">Sertlik</span>
-                </button>
-                <div class="layer-legend" id="legend" style="display: none;"></div>
-            `;
-            
-            // Prevent map interactions on control
-            L.DomEvent.disableClickPropagation(container);
-            L.DomEvent.disableScrollPropagation(container);
-            
-            // Add click handlers
-            const buttons = container.querySelectorAll('.layer-btn');
-            buttons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const layer = this.getAttribute('data-layer');
-                    
-                    // Update active state
-                    buttons.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Trigger callback
-                    onLayerChange(layer);
+            const updateContent = () => {
+                container.innerHTML = `
+                    <div class="layer-control-title">${getText('layerControlTitle')}</div>
+                    <button class="layer-btn active" data-layer="none">
+                        <span class="btn-icon"><i class="fas fa-map-marker-alt"></i></span>
+                        <span class="btn-label">${getText('noLayer')}</span>
+                    </button>
+                    <button class="layer-btn" data-layer="ph-interp">
+                        <span class="btn-icon"><i class="fas fa-vial"></i></span>
+                        <span class="btn-label">${getText('phLayer')}</span>
+                    </button>
+                    <button class="layer-btn" data-layer="chlorine-interp">
+                        <span class="btn-icon"><i class="fas fa-tint"></i></span>
+                        <span class="btn-label">${getText('chlorineLayer')}</span>
+                    </button>
+                    <button class="layer-btn" data-layer="hardness-interp">
+                        <span class="btn-icon"><i class="fas fa-filter"></i></span>
+                        <span class="btn-label">${getText('hardnessLayer')}</span>
+                    </button>
+                    <div class="layer-legend" id="legend" style="display: none;"></div>
+                `;
+                
+                // Re-attach event listeners after updating content
+                const buttons = container.querySelectorAll('.layer-btn');
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const layer = this.getAttribute('data-layer');
+                        
+                        // Update active state
+                        buttons.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        // Trigger callback
+                        onLayerChange(layer);
+                    });
                 });
-            });
+            };
+            
+            // Initial content
+            updateContent();
+            
+            // Listen for language changes
+            window.addEventListener('languageChanged', updateContent);
             
             return container;
         }

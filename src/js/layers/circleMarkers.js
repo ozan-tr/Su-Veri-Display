@@ -4,12 +4,39 @@
  */
 
 /**
+ * Get icon HTML based on water type
+ * @param {string} type - Water type (musluk, su sebili, arıtma)
+ * @param {string} color - Color for the icon
+ * @returns {L.DivIcon} Leaflet div icon
+ */
+function getIconForType(type, color) {
+    let iconClass = 'fa-solid fa-droplet'; // Default icon
+    
+    if (type === 'su sebili') {
+        iconClass = 'fa-solid fa-water';
+    } else if (type === 'arıtma') {
+        iconClass = 'fa-solid fa-filter';
+    } else if (type === 'musluk') {
+        iconClass = 'fa-solid fa-faucet';
+    }
+    
+    return L.divIcon({
+        html: `<i class="${iconClass}" style="color: ${color}; font-size: 24px;"></i>`,
+        className: 'custom-marker-icon',
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
+        popupAnchor: [0, -15]
+    });
+}
+
+/**
  * Create circle markers for all metrics
  * @param {Array} data - Array of data points
  * @param {string} currentLayerName - Currently active layer
+ * @param {string} displayType - 'icons' or 'circles'
  * @returns {Object} Object containing circle marker arrays for each metric
  */
-function createCircleMarkers(data, currentLayerName) {
+function createCircleMarkers(data, currentLayerName, displayType = 'icons') {
     const markers = {
         ph: [],
         chlorine: [],
@@ -19,33 +46,43 @@ function createCircleMarkers(data, currentLayerName) {
     data.forEach(item => {
         const lat = item.coordinates.latitude;
         const lng = item.coordinates.longitude;
+        const type = item.type || 'musluk';
         
-        // pH Circle Marker
+        // pH Marker
         const phData = loadPhData(item);
         const phValue = parseFloat(phData.avg.all);
-        markers.ph.push(createCircleMarker(
+        const phColor = getColorForPh(phValue);
+        markers.ph.push(createMarker(
             [lat, lng], 
-            getColorForPh(phValue), 
+            type,
+            phColor,
             item, 
-            currentLayerName
+            currentLayerName,
+            displayType
         ));
         
-        // Chlorine Circle Marker
+        // Chlorine Marker
         const chlorineValue = item.klor || 0;
-        markers.chlorine.push(createCircleMarker(
+        const chlorineColor = getColorForChlorine(chlorineValue);
+        markers.chlorine.push(createMarker(
             [lat, lng], 
-            getColorForChlorine(chlorineValue), 
+            type,
+            chlorineColor,
             item, 
-            currentLayerName
+            currentLayerName,
+            displayType
         ));
         
-        // Hardness Circle Marker
+        // Hardness Marker
         const hardnessValue = item.hardness || 0;
-        markers.hardness.push(createCircleMarker(
+        const hardnessColor = getColorForHardness(hardnessValue);
+        markers.hardness.push(createMarker(
             [lat, lng], 
-            getColorForHardness(hardnessValue), 
+            type,
+            hardnessColor,
             item, 
-            currentLayerName
+            currentLayerName,
+            displayType
         ));
     });
     
@@ -53,26 +90,39 @@ function createCircleMarkers(data, currentLayerName) {
 }
 
 /**
- * Create a single circle marker
+ * Create a single marker (icon or circle based on display type)
  * @param {Array} latlng - [latitude, longitude]
- * @param {string} color - Fill color
+ * @param {string} type - Water type
+ * @param {string} color - Marker color
  * @param {Object} data - Data point for popup
  * @param {string} currentLayerName - Currently active layer
- * @returns {L.CircleMarker} Leaflet circle marker
+ * @param {string} displayType - 'icons' or 'circles'
+ * @returns {L.Marker} Leaflet marker
  */
-function createCircleMarker(latlng, color, data, currentLayerName) {
-    const circle = L.circleMarker(latlng, {
-        radius: 10, // Slightly smaller for better performance
-        fillColor: color,
-        color: '#fff',
-        weight: 2,
-        opacity: 1,
-        fillOpacity: 0.8,
-        pane: 'markerPane' // Use dedicated pane for better layering
-    });
+function createMarker(latlng, type, color, data, currentLayerName, displayType = 'icons') {
+    let marker;
+    
+    if (displayType === 'icons') {
+        // Create icon marker
+        marker = L.marker(latlng, {
+            icon: getIconForType(type, color),
+            pane: 'markerPane'
+        });
+    } else {
+        // Create circle marker
+        marker = L.circleMarker(latlng, {
+            radius: 10,
+            fillColor: color,
+            color: '#fff',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8,
+            pane: 'markerPane'
+        });
+    }
     
     // Bind popup lazily (only create when clicked)
-    circle.on('click', function() {
+    marker.on('click', function() {
         if (!this._popup) {
             this.bindPopup(createPopup(data, currentLayerName), {
                 maxWidth: 300,
@@ -82,5 +132,5 @@ function createCircleMarker(latlng, color, data, currentLayerName) {
         this.openPopup();
     });
     
-    return circle;
+    return marker;
 }
