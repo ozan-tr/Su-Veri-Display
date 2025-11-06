@@ -1,53 +1,104 @@
 # Su Veri Display - Water Quality Visualization
 
-Interactive map visualization for water quality data across Istanbul, Turkey.
+Interactive web application for visualizing water quality data across Istanbul neighborhoods. Built with Leaflet.js and featuring real-time interpolation, multi-language support, and comprehensive data analysis tools.
+
+## Features
+
+### Data Visualization
+- Interactive map with multiple base layers (Street, Minimal, Satellite)
+- Color-coded markers for water sources (Tap Water, Water Fountains)
+- Real-time IDW (Inverse Distance Weighting) interpolation
+- Smooth color gradients with convex hull boundaries
+- Dynamic legend showing parameter ranges and ideal values
+
+### Water Quality Parameters
+- pH Level (Ideal: 6.5-8.5)
+- Chlorine Content (Ideal: 0.2-0.5 mg/L)
+- Water Hardness (Ideal: 50-250 mg/L CaCO3)
+
+### Interactive Controls
+- Layer control for switching between pH, Chlorine, and Hardness interpolation
+- Map view selector for different base map styles
+- Unified options menu with collapsible sections
+- Detailed popups showing all measurements for each location
+
+### Multi-Language Support
+- Turkish, English, and French localization
+- Dynamic content updates on language change
+- Persistent language preference
+
+### Information Modals
+- Information modal explaining the experiment and parameters
+- Process modal detailing data collection methodology
+- About modal with team and project information
+- Navigation between modals with keyboard and arrow controls
+
+### Technical Features
+- Responsive design for desktop and mobile devices
+- Modular component architecture with shared factory pattern
+- Custom color interpolation algorithms
+- Canvas-based rendering for smooth gradients
+- Accessible UI with ARIA labels and keyboard navigation
 
 ## Project Structure
 
 ```
 Su Veri Display/
-├── index.html                          # Main HTML file
+├── index.html
 ├── src/
 │   ├── css/
-│   │   ├── main.css                    # Main CSS orchestrator
-│   │   ├── leaflet-overrides.css       # Leaflet customizations
-│   │   ├── responsive.css              # Responsive design rules
-│   │   └── components/                 # Component-specific styles
-│   │       ├── popup.css               # Popup styling
-│   │       ├── layerControl.css        # Layer control styling
-│   │       ├── mapViewControl.css      # Map view control styling
-│   │       ├── optionsMenu.css         # Options menu styling
-│   │       └── legend.css              # Legend styling
+│   │   ├── main.css
+│   │   ├── leaflet-overrides.css
+│   │   ├── responsive.css
+│   │   └── components/
+│   │       ├── popup.css
+│   │       ├── layerControl.css
+│   │       ├── mapViewControl.css
+│   │       ├── optionsMenu.css
+│   │       ├── legend.css
+│   │       ├── infoButton.css
+│   │       ├── aboutButton.css
+│   │       ├── processButton.css
+│   │       └── modalNavigation.css
 │   ├── data/
-│   │   └── data.js                     # Water quality data with type info
+│   │   ├── data.js
+│   │   └── localization.js
 │   └── js/
-│       ├── app.js                      # Main application entry point
-│       ├── utils/                      # Utility functions
-│       │   ├── colorInterpolation.js   # Color gradient calculations
-│       │   ├── dataHelpers.js          # Convex hull, polygon ops, fade
-│       │   └── interpolation.js        # IDW interpolation algorithm
-│       ├── components/                 # UI components
-│       │   ├── popup.js                # Marker popup with type display
-│       │   ├── legend.js               # Color scale legend
-│       │   ├── layerControl.js         # Layer switching control
-│       │   ├── mapViewControl.js       # Map style switcher
-│       │   └── optionsMenu.js          # Unified control menu
-│       └── layers/                     # Map layers
-│           ├── circleMarkers.js        # Icon-based markers by type
-│           └── interpolationLayer.js   # Canvas interpolation with fade
+│       ├── app.js
+│       ├── utils/
+│       │   ├── colorInterpolation.js
+│       │   ├── dataHelpers.js
+│       │   └── interpolation.js
+│       ├── components/
+│       │   ├── popup.js
+│       │   ├── legend.js
+│       │   ├── layerControl.js
+│       │   ├── mapViewControl.js
+│       │   ├── optionsMenu.js
+│       │   ├── modalFactory.js
+│       │   ├── infoButton.js
+│       │   ├── aboutButton.js
+│       │   ├── processButton.js
+│       │   └── modalNavigation.js
+│       └── layers/
+│           ├── circleMarkers.js
+│           └── interpolationLayer.js
 ```
 
-## Features
+## Technologies
 
-### Water Source Types
-Each water sample is categorized and displayed with a unique icon:
-- **Musluk (Tap Water)** - Municipal tap water samples
-- **Su Sebili (Water Fountain)** - Public water fountain samples  
+- Leaflet.js - Interactive mapping library
+- Font Awesome - Icon library
+- Vanilla JavaScript - No frameworks required
+- CSS3 with modern features (backdrop-filter, CSS Grid, Flexbox)
 
-Markers display colored icons based on both their water type and quality metrics.
+## Data Collection
 
-### Water Quality Metrics
-- **pH Level** (5-9 range) - Full spectrum interpolation from red (acidic) to violet (alkaline)
+Water samples were collected from various neighborhoods across Istanbul by Irmak Caran and Zeynep Karademir. Each sample was tested for pH, chlorine content, and water hardness using multiple measurement methods to ensure accuracy.
+
+## License
+
+This project was created as part of a water quality analysis experiment for World Water Day educational purposes.
 - **Chlorine Level** (0-0.3 mg/L) - Blue (low) to red (high)
 - **Water Hardness** (0-40 °dH) - Light blue (soft) to purple (hard)
 
