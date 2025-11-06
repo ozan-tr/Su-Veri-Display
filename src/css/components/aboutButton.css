@@ -90,7 +90,7 @@
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
     width: 600px;
     max-width: calc(100vw - 40px);
-    max-height: calc(100vh - 80px);
+    max-height: calc(100vh - 120px);
     opacity: 0;
     visibility: hidden;
     transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -157,7 +157,7 @@
 }
 
 .about-section-title {
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 700;
     color: #667eea;
     margin-bottom: 10px;
@@ -168,11 +168,11 @@
 }
 
 .about-section-title i {
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .about-section-content {
-    font-size: 13px;
+    font-size: 15px;
     color: #495057;
     line-height: 1.6;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
