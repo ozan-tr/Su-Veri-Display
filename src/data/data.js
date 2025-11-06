@@ -506,4 +506,5 @@ const DATA = [
     alkalinite: 3,
     coordinates: { latitude: 40.89, longitude: 29.19 },
   },
+  
 ];

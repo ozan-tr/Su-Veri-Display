@@ -3,6 +3,10 @@
 @import url("components/mapViewControl.css");
 @import url("components/optionsMenu.css");
 @import url("components/legend.css");
+@import url("components/infoButton.css");
+@import url("components/aboutButton.css");
+@import url("components/processButton.css");
+@import url("components/modalNavigation.css");
 @import url("leaflet-overrides.css");
 @import url("responsive.css");
 

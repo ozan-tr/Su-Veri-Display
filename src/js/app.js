@@ -84,6 +84,9 @@ function loadData() {
     createLayerControl(state.map, handleLayerChange);
     createMapViewControl(state.map).addTo(state.map);
     createOptionsMenu(state.map).addTo(state.map);
+    createInfoButton(state.map);
+    createAboutButton(state.map);
+    createProcessButton(state.map);
 }
 
 /**

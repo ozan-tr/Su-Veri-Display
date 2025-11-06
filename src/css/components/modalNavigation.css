@@ -1,0 +1,153 @@
+/* Modal Navigation Arrows */
+.modal-nav-arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.modal-nav-arrow.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-nav-arrow.left {
+    left: 40px;
+}
+
+.modal-nav-arrow.right {
+    right: 40px;
+}
+
+.modal-nav-arrow::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.modal-nav-arrow:hover::before {
+    width: 100px;
+    height: 100px;
+}
+
+.modal-nav-arrow:hover {
+    transform: translateY(-50%) scale(1.15);
+    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+}
+
+.modal-nav-arrow:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.modal-nav-arrow i {
+    position: relative;
+    z-index: 1;
+}
+
+/* Modal indicator dots */
+.modal-indicators {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-indicators.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    border: 2px solid #667eea;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-indicator.active {
+    background: #667eea;
+    transform: scale(1.3);
+}
+
+.modal-indicator:hover {
+    background: #764ba2;
+    transform: scale(1.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .modal-nav-arrow {
+        width: 50px;
+        height: 50px;
+        font-size: 22px;
+    }
+    
+    .modal-nav-arrow.left {
+        left: 20px;
+    }
+    
+    .modal-nav-arrow.right {
+        right: 20px;
+    }
+    
+    .modal-indicators {
+        bottom: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-nav-arrow {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+    }
+    
+    .modal-nav-arrow.left {
+        left: 10px;
+    }
+    
+    .modal-nav-arrow.right {
+        right: 10px;
+    }
+    
+    .modal-indicators {
+        bottom: 15px;
+        gap: 8px;
+    }
+    
+    .modal-indicator {
+        width: 8px;
+        height: 8px;
+    }
+}

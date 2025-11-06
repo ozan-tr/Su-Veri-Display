@@ -1,0 +1,315 @@
+/* Info Button Component */
+.info-button {
+    z-index: 1000;
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+}
+
+.info-toggle {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.info-toggle::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.info-toggle:hover::before {
+    width: 100px;
+    height: 100px;
+}
+
+.info-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+}
+
+.info-toggle.active {
+    transform: scale(0.95);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.info-toggle i {
+    position: relative;
+    z-index: 1;
+}
+
+/* Modal Backdrop */
+.info-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.info-modal-backdrop.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Info Popup */
+.info-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.7);
+    background: white;
+    border: 3px solid #667eea;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    width: 600px;
+    max-width: calc(100vw - 40px);
+    max-height: calc(100vh - 80px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    overflow: hidden;
+    z-index: 9999;
+}
+
+.info-popup.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.info-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.info-title {
+    font-size: 18px;
+    font-weight: 700;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.info-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+.info-content {
+    padding: 20px;
+    max-height: calc(100vh - 240px);
+    overflow-y: auto;
+}
+
+.info-section {
+    margin-bottom: 20px;
+}
+
+.info-section:last-child {
+    margin-bottom: 0;
+}
+
+.info-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.info-section-title i {
+    font-size: 16px;
+}
+
+.info-section-content {
+    font-size: 13px;
+    color: #495057;
+    line-height: 1.6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.info-section-content p {
+    margin: 8px 0;
+}
+
+.info-section-content ul {
+    margin: 8px 0;
+    padding-left: 20px;
+}
+
+.info-section-content li {
+    margin: 6px 0;
+}
+
+.info-divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #e9ecef, transparent);
+    margin: 16px 0;
+}
+
+.info-footer {
+    padding: 16px 20px;
+    background: #f8f9fa;
+    border-top: 2px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #6c757d;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.info-footer i {
+    color: #667eea;
+}
+
+/* Scrollbar Styles */
+.info-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.info-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.info-content::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 3px;
+}
+
+.info-content::-webkit-scrollbar-thumb:hover {
+    background: #764ba2;
+}
+
+/* Animations */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .info-button {
+        bottom: 20px;
+        right: 20px;
+    }
+    
+    .info-toggle {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+    
+    .info-popup {
+        width: calc(100vw - 30px);
+    }
+    
+    .info-content {
+        max-height: calc(100vh - 200px);
+    }
+}
+
+@media (max-width: 480px) {
+    .info-button {
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    .info-toggle {
+        width: 48px;
+        height: 48px;
+        font-size: 18px;
+    }
+    
+    .info-popup {
+        width: calc(100vw - 20px);
+    }
+    
+    .info-header {
+        padding: 14px 16px;
+    }
+    
+    .info-title {
+        font-size: 16px;
+    }
+    
+    .info-content {
+        padding: 16px;
+        max-height: calc(100vh - 180px);
+    }
+    
+    .info-section-title {
+        font-size: 14px;
+    }
+    
+    .info-section-content {
+        font-size: 12px;
+    }
+}
