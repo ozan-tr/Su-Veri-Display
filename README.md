@@ -1,4 +1,4 @@
-# Su Veri Display - Water Quality Visualization
+# Between the Pipes - Water Quality Visualization
 
 Interactive web application for visualizing water quality data across Istanbul neighborhoods. Built with Leaflet.js and featuring real-time interpolation, multi-language support, and comprehensive data analysis tools.
 
@@ -43,7 +43,7 @@ Interactive web application for visualizing water quality data across Istanbul n
 ## Project Structure
 
 ```
-Su Veri Display/
+Between the Pipes/
 ├── index.html
 ├── src/
 │   ├── css/

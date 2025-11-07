@@ -133,7 +133,25 @@ const LOCALIZATION = {
         processMethodsContent: "Ölçümlerimizde üç farklı yöntem kullandık: pH kağıdı (kolorimetrik), pH metre (elektrometrik) ve SuTest cihazı. Klor ölçümleri için DPD yöntemi, sertlik ölçümleri için titrasyon yöntemi uygulandı. Tüm veriler üç kez tekrarlanarak güvenilirlik sağlandı.",
         processResultsTitle: "Sonuçlar",
         processResultsContent: "Toplanan veriler, İstanbul'daki su kalitesinin bölgesel farklılıklarını ortaya koydu. Harita üzerindeki görselleştirmeler, su kalitesi parametrelerinin coğrafi dağılımını anlaşılır kılmaktadır.",
-        processFooter: "Bilimsel yöntemlerle güvenilir veriler"
+        processFooter: "Bilimsel yöntemlerle güvenilir veriler",
+        
+        // Tutorial
+        tutorialWelcomeTitle: "Between the Pipes'e Hoş Geldiniz!",
+        tutorialWelcomeContent: "İstanbul'daki su kalitesi verilerini keşfetmek için size kısa bir tur sunalım mı? Bu tur, uygulamanın özelliklerini anlamanıza yardımcı olacak.",
+        tutorialStart: "Tura Başla",
+        tutorialSkip: "Atla",
+        tutorialNext: "İleri",
+        tutorialFinish: "Bitir",
+        optionsMenuTutorialTitle: "Seçenekler Menüsü",
+        optionsMenuTutorialContent: "Buradan tüm kontrollere erişebilirsiniz. Dil seçimi, veri katmanları ve harita görünümü ayarlarını burada bulabilirsiniz.",
+        languageTutorialTitle: "Dil Seçimi",
+        languageTutorialContent: "Uygulamayı Türkçe, İngilizce veya Fransızca kullanabilirsiniz. Seçiminiz tarayıcınızda kaydedilir.",
+        layerControlTutorialTitle: "Veri Katmanları",
+        layerControlTutorialContent: "Farklı su kalitesi parametrelerini (pH, Klor, Sertlik) görselleştirmek için bu katmanlar arasında geçiş yapın. Her katman, farklı bir parametre için renk interpolasyonu gösterir.",
+        infoButtonTutorialTitle: "Bilgi ve Yardım",
+        infoButtonTutorialContent: "Bu butonlar deneyin detayları, veri toplama süreci ve ekip hakkında bilgi içerir. Oklar ile modallar arasında geçiş yapabilirsiniz.",
+        mapInteractionTutorialTitle: "Harita Kullanımı",
+        mapInteractionTutorialContent: "Haritayı yakınlaştırıp uzaklaştırabilir, işaretleyicilere tıklayarak detaylı su kalitesi verilerini görebilirsiniz. İyi keşifler!"
     },
     
     en: {
@@ -265,7 +283,25 @@ const LOCALIZATION = {
         processMethodsContent: "We used three different methods in our measurements: pH paper (colorimetric), pH meter (electrometric), and SuTest device. DPD method for chlorine measurements and titration method for hardness measurements were applied. All data was repeated three times to ensure reliability.",
         processResultsTitle: "Results",
         processResultsContent: "The collected data revealed regional differences in water quality in Istanbul. The visualizations on the map make the geographical distribution of water quality parameters understandable.",
-        processFooter: "Reliable data through scientific methods"
+        processFooter: "Reliable data through scientific methods",
+        
+        // Tutorial
+        tutorialWelcomeTitle: "Welcome to Between the Pipes!",
+        tutorialWelcomeContent: "Would you like a quick tour to explore water quality data across Istanbul? This tour will help you understand the application's features.",
+        tutorialStart: "Start Tour",
+        tutorialSkip: "Skip",
+        tutorialNext: "Next",
+        tutorialFinish: "Finish",
+        optionsMenuTutorialTitle: "Options Menu",
+        optionsMenuTutorialContent: "Access all controls from here. You can find language selection, data layers, and map view settings in this menu.",
+        languageTutorialTitle: "Language Selection",
+        languageTutorialContent: "You can use the application in Turkish, English, or French. Your choice is saved in your browser.",
+        layerControlTutorialTitle: "Data Layers",
+        layerControlTutorialContent: "Switch between layers to visualize different water quality parameters (pH, Chlorine, Hardness). Each layer shows color interpolation for a different parameter.",
+        infoButtonTutorialTitle: "Information and Help",
+        infoButtonTutorialContent: "These buttons contain details about the experiment, data collection process, and team information. You can navigate between modals using arrows.",
+        mapInteractionTutorialTitle: "Map Usage",
+        mapInteractionTutorialContent: "You can zoom in and out on the map, click on markers to see detailed water quality data. Happy exploring!"
     },
     
     fr: {
@@ -397,7 +433,25 @@ const LOCALIZATION = {
         processMethodsContent: "Nous avons utilisé trois méthodes différentes dans nos mesures: papier pH (colorimétrique), pH-mètre (électrométrique) et dispositif SuTest. La méthode DPD pour les mesures de chlore et la méthode de titrage pour les mesures de dureté ont été appliquées. Toutes les données ont été répétées trois fois pour assurer la fiabilité.",
         processResultsTitle: "Résultats",
         processResultsContent: "Les données collectées ont révélé des différences régionales dans la qualité de l'eau à Istanbul. Les visualisations sur la carte rendent compréhensible la distribution géographique des paramètres de qualité de l'eau.",
-        processFooter: "Des données fiables grâce aux méthodes scientifiques"
+        processFooter: "Des données fiables grâce aux méthodes scientifiques",
+        
+        // Tutorial
+        tutorialWelcomeTitle: "Bienvenue sur Between the Pipes !",
+        tutorialWelcomeContent: "Souhaitez-vous une visite rapide pour explorer les données de qualité de l'eau à Istanbul ? Cette visite vous aidera à comprendre les fonctionnalités de l'application.",
+        tutorialStart: "Commencer la visite",
+        tutorialSkip: "Passer",
+        tutorialNext: "Suivant",
+        tutorialFinish: "Terminer",
+        optionsMenuTutorialTitle: "Menu des options",
+        optionsMenuTutorialContent: "Accédez à tous les contrôles depuis ici. Vous pouvez trouver la sélection de langue, les couches de données et les paramètres de vue de carte dans ce menu.",
+        languageTutorialTitle: "Sélection de la langue",
+        languageTutorialContent: "Vous pouvez utiliser l'application en turc, anglais ou français. Votre choix est enregistré dans votre navigateur.",
+        layerControlTutorialTitle: "Couches de données",
+        layerControlTutorialContent: "Basculez entre les couches pour visualiser différents paramètres de qualité de l'eau (pH, Chlore, Dureté). Chaque couche affiche une interpolation de couleur pour un paramètre différent.",
+        infoButtonTutorialTitle: "Information et aide",
+        infoButtonTutorialContent: "Ces boutons contiennent des détails sur l'expérience, le processus de collecte de données et les informations sur l'équipe. Vous pouvez naviguer entre les modales en utilisant les flèches.",
+        mapInteractionTutorialTitle: "Utilisation de la carte",
+        mapInteractionTutorialContent: "Vous pouvez zoomer et dézoomer sur la carte, cliquer sur les marqueurs pour voir les données détaillées de qualité de l'eau. Bonne exploration !"
     }
 };
 
