@@ -43,6 +43,13 @@ let tutorialActive = false;
  * Initialize tutorial system
  */
 function initializeTutorial() {
+    // Check if localization is loaded
+    if (typeof getText !== 'function' || typeof getCurrentLanguage !== 'function') {
+        console.error('Tutorial: Localization functions not available, retrying...');
+        setTimeout(initializeTutorial, 500);
+        return;
+    }
+    
     // Check if user has seen tutorial before
     const hasSeenTutorial = localStorage.getItem('hasSeenTutorial');
     
@@ -58,6 +65,12 @@ function initializeTutorial() {
  * Show welcome screen
  */
 function showWelcomeScreen() {
+    // Double-check localization is available
+    if (typeof getText !== 'function' || typeof getCurrentLanguage !== 'function') {
+        console.error('Tutorial: Cannot show welcome screen - localization not loaded');
+        return;
+    }
+    
     const overlay = document.createElement('div');
     overlay.className = 'tutorial-overlay active';
     overlay.id = 'tutorialOverlay';

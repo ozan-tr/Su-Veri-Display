@@ -488,3 +488,9 @@ function updateUILanguage() {
     // Dispatch custom event to notify all components
     window.dispatchEvent(new CustomEvent('languageChanged', { detail: { language: lang } }));
 }
+
+// Expose functions globally for use by other components
+window.getCurrentLanguage = getCurrentLanguage;
+window.setCurrentLanguage = setCurrentLanguage;
+window.getText = getText;
+window.updateUILanguage = updateUILanguage;
