@@ -175,6 +175,27 @@
     font-size: 18px;
 }
 
+/* Team Member Layout */
+.team-member {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.team-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 3px solid #667eea;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.team-info {
+    flex: 1;
+}
+
 .about-section-content {
     font-size: 15px;
     color: #495057;
@@ -284,6 +305,17 @@
     
     .about-content {
         max-height: calc(100vh - 200px);
+    }
+    
+    .team-member {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .team-photo {
+        width: 100px;
+        height: 100px;
     }
 }
 

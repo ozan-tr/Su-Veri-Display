@@ -19,36 +19,48 @@ function getAboutModalContent() {
         </div>
         <div class="about-content">
             <div class="about-section">
-                <div class="about-section-title">
-                    <i class="fas fa-user"></i>
-                    ${getText('aboutIrmakTitle')}
-                </div>
-                <div class="about-section-content">
-                    <p>${getText('aboutIrmakContent')}</p>
-                </div>
-            </div>
-            
-            <div class="about-divider"></div>
-            
-            <div class="about-section">
-                <div class="about-section-title">
-                    <i class="fas fa-user"></i>
-                    ${getText('aboutZeynepTitle')}
-                </div>
-                <div class="about-section-content">
-                    <p>${getText('aboutZeynepContent')}</p>
+                <div class="team-member">
+                    <img src="./src/img/team/irmak.jpg" alt="Irmak Caran" class="team-photo">
+                    <div class="team-info">
+                        <div class="about-section-title">
+                            ${getText('aboutIrmakTitle')}
+                        </div>
+                        <div class="about-section-content">
+                            <p>${getText('aboutIrmakContent')}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             
             <div class="about-divider"></div>
             
             <div class="about-section">
-                <div class="about-section-title">
-                    <i class="fas fa-user"></i>
-                    ${getText('aboutOzanTitle')}
+                <div class="team-member">
+                    <img src="./src/img/team/zeynep.jpg" alt="Zeynep Karademir" class="team-photo">
+                    <div class="team-info">
+                        <div class="about-section-title">
+                            ${getText('aboutZeynepTitle')}
+                        </div>
+                        <div class="about-section-content">
+                            <p>${getText('aboutZeynepContent')}</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="about-section-content">
-                    <p>${getText('aboutOzanContent')}</p>
+            </div>
+            
+            <div class="about-divider"></div>
+            
+            <div class="about-section">
+                <div class="team-member">
+                    <img src="./src/img/team/ozan.jpg" alt="Ozan Gürleyen" class="team-photo">
+                    <div class="team-info">
+                        <div class="about-section-title">
+                            ${getText('aboutOzanTitle')}
+                        </div>
+                        <div class="about-section-content">
+                            <p>${getText('aboutOzanContent')}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
