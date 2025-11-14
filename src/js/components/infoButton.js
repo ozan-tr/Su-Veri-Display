@@ -81,6 +81,13 @@ function getInfoModalContent() {
                     </ul>
                 </div>
             </div>
+            
+            <div class="info-tutorial-restart">
+                <button class="restart-tutorial-btn" onclick="resetTutorial(); closeInfoModal();">
+                    <i class="fas fa-redo"></i>
+                    ${getText('restartTutorial') || 'Restart Tutorial'}
+                </button>
+            </div>
         </div>
         <div class="info-footer">
             <i class="fas fa-code"></i>
