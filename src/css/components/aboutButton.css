@@ -1,6 +1,10 @@
 /* About Button Component */
+.about-button-container {
+    z-index: 300 !important;
+}
+
 .about-button {
-    z-index: 1000;
+    z-index: 300;
     position: absolute;
     bottom: 100px;
     right: 30px;
@@ -255,6 +259,13 @@
 }
 
 /* Responsive Design */
+@media (max-width: 900px) {
+    .about-popup {
+        width: calc(100vw - 60px);
+        max-width: 700px;
+    }
+}
+
 @media (max-width: 768px) {
     .about-button {
         bottom: 90px;
@@ -268,7 +279,7 @@
     }
     
     .about-popup {
-        width: calc(100vw - 30px);
+        width: calc(100vw - 40px);
     }
     
     .about-content {

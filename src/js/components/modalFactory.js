@@ -30,7 +30,7 @@ function createModalComponent(config) {
                 container.style.position = 'absolute';
                 container.style.bottom = `${bottomPosition}px`;
                 container.style.right = '30px';
-                container.style.zIndex = '1000';
+                container.style.zIndex = '300';
                 
                 const button = L.DomUtil.create('button', `${type}-toggle`, container);
                 button.innerHTML = `<i class="${icon}"></i>`;

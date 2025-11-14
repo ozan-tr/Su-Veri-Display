@@ -7,7 +7,7 @@
     padding: 16px;
     min-width: 220px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    z-index: 9999 !important;
+    z-index: 400 !important;
     position: relative;
     margin-left: 10px !important;
     margin-bottom: 10px !important;

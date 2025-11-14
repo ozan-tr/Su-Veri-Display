@@ -68,7 +68,7 @@
 
 /* Layer Control Positioning */
 .leaflet-bottom.leaflet-left {
-    z-index: 9999 !important;
+    z-index: 400 !important;
     pointer-events: auto !important;
 }
 
@@ -95,3 +95,9 @@
 canvas.leaflet-tile {
     image-rendering: auto !important;
 }
+
+/* Ensure top-right controls are above bottom-right buttons */
+.leaflet-top.leaflet-right {
+    z-index: 500 !important;
+}
+

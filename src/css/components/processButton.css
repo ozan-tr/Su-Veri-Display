@@ -1,6 +1,10 @@
 /* Process Button Component */
+.process-button-container {
+    z-index: 300 !important;
+}
+
 .process-button {
-    z-index: 1000;
+    z-index: 300;
     position: absolute;
     bottom: 170px;
     right: 30px;
@@ -506,6 +510,24 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+    .process-popup {
+        width: 750px;
+    }
+}
+
+@media (max-width: 900px) {
+    .process-popup {
+        width: calc(100vw - 60px);
+        max-width: 700px;
+    }
+    
+    .process-step img.float-left,
+    .process-step img.float-right {
+        width: 200px;
+    }
+}
+
 @media (max-width: 768px) {
     .process-button {
         bottom: 160px;
@@ -519,11 +541,23 @@
     }
     
     .process-popup {
-        width: calc(100vw - 30px);
+        width: calc(100vw - 40px);
     }
     
     .process-content {
         max-height: calc(100vh - 200px);
+    }
+    
+    .process-step img.float-left,
+    .process-step img.float-right {
+        float: none;
+        width: 100%;
+        margin: 0 0 15px 0;
+    }
+    
+    .right-images-container {
+        float: none;
+        width: 100%;
     }
 }
 
