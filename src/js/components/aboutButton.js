@@ -20,11 +20,11 @@ function getAboutModalContent() {
         <div class="about-content">
             <div class="about-section">
                 <div class="about-section-title">
-                    <i class="fas fa-users"></i>
-                    ${getText('aboutTeamTitle')}
+                    <i class="fas fa-user"></i>
+                    ${getText('aboutIrmakTitle')}
                 </div>
                 <div class="about-section-content">
-                    <p>${getText('aboutTeamContent')}</p>
+                    <p>${getText('aboutIrmakContent')}</p>
                 </div>
             </div>
             
@@ -32,11 +32,11 @@ function getAboutModalContent() {
             
             <div class="about-section">
                 <div class="about-section-title">
-                    <i class="fas fa-bullseye"></i>
-                    ${getText('aboutMissionTitle')}
+                    <i class="fas fa-user"></i>
+                    ${getText('aboutZeynepTitle')}
                 </div>
                 <div class="about-section-content">
-                    <p>${getText('aboutMissionContent')}</p>
+                    <p>${getText('aboutZeynepContent')}</p>
                 </div>
             </div>
             
@@ -44,11 +44,11 @@ function getAboutModalContent() {
             
             <div class="about-section">
                 <div class="about-section-title">
-                    <i class="fas fa-envelope"></i>
-                    ${getText('aboutContactTitle')}
+                    <i class="fas fa-user"></i>
+                    ${getText('aboutOzanTitle')}
                 </div>
                 <div class="about-section-content">
-                    <p>${getText('aboutContactContent')}</p>
+                    <p>${getText('aboutOzanContent')}</p>
                 </div>
             </div>
         </div>
